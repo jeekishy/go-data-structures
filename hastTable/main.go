@@ -29,6 +29,9 @@ func main() {
 	// deleting value from hash table
 	ht.delete("pineapple")           // O(1)
 	fmt.Println(ht.get("pineapple")) // O(1)
+
+	// get all keys in out hashTable
+	fmt.Println(ht.keys()) // O(n)
 }
 
 // NewHashTable get new hashTable
@@ -58,6 +61,17 @@ func (h *HastTable) delete(key string) bool {
 		return true
 	}
 	return false
+}
+
+// keys returns a slice of keys in our hash table
+func (h *HastTable) keys() []int {
+	keys := make([]int, 0)
+
+	for i, _ := range h.data {
+		keys = append(keys, i)
+	}
+
+	return keys
 }
 
 // hash generates an int from provide key string
