@@ -37,6 +37,17 @@ func main() {
 
 	l.insert("berries", 0)
 	fmt.Println(l.toString())
+
+	l.delete(5)
+	fmt.Println(l.toString())
+
+	l.delete(6)
+	fmt.Println(l.toString())
+
+	l.delete(0)
+	fmt.Println(l.toString())
+
+	fmt.Println(l)
 }
 
 func NewLinkedList(value string) *LinkedList {
@@ -58,7 +69,7 @@ func NewNode(value string) *Node {
 	}
 }
 
-// append add a Node at the end of the linked list
+// append add a Node at the end of the linked list - O(1)
 func (l *LinkedList) append(value string) {
 	// create new Node
 	n := NewNode(value)
@@ -73,7 +84,7 @@ func (l *LinkedList) append(value string) {
 	l.length++
 }
 
-// prepend adds a Node at the start of the linked list
+// prepend adds a Node at the start of the linked list - O(1)
 func (l *LinkedList) prepend(value string) {
 	// create new Node
 	n := NewNode(value)
@@ -102,7 +113,7 @@ func (l *LinkedList) insert(value string, index int) {
 		return
 	}
 
-	// traverse linked list and find starting node
+	// traverse linked list and find the node before the index
 	preNode := l.getNodeAtIndex(index - 1)
 
 	// make new node pointer to node at current index
@@ -111,6 +122,45 @@ func (l *LinkedList) insert(value string, index int) {
 
 	// update and assign previous node to newly created node
 	preNode.next = n
+
+	// update node counter
+	l.length++
+}
+
+// delete removes a node at a given index - O(n)
+func (l *LinkedList) delete(index int) {
+	// check index is out of range
+	if index > l.length {
+		return
+	}
+
+	// check index is the head then make the next node the head
+	if index == 0 {
+		nodeToDelete := l.head
+
+		// make the next node the head
+		l.head = nodeToDelete.next
+
+		// remove link of node to be deleted
+		nodeToDelete.next = nil
+
+		// update counter
+		l.length--
+		return
+	}
+
+	// traverse linked list and find the node before the index
+	preNode := l.getNodeAtIndex(index - 1)
+	nodeToDelete := preNode.next
+
+	// link preNode to node after index
+	preNode.next = nodeToDelete.next
+
+	// remove node to delete next link to other node
+	nodeToDelete.next = nil
+
+	// update counter
+	l.length--
 }
 
 // toString generates a string representation of the linked list
@@ -140,7 +190,7 @@ func (n *Node) toString() string {
 	return "[v: " + n.value + ", p: *" + pointer + "]"
 }
 
-// getNodeAtIndex returns the node at the given index
+// getNodeAtIndex returns the node at the given index - O(n)
 func (l *LinkedList) getNodeAtIndex(index int) *Node {
 	// start from head of linked list
 	pointer := l.head
