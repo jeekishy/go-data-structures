@@ -28,6 +28,15 @@ func main() {
 
 	l.prepend("pears")
 	fmt.Println(l.toString())
+
+	l.append("avocado")
+	fmt.Println(l.toString())
+
+	l.insert("coconut", 2)
+	fmt.Println(l.toString())
+
+	l.insert("berries", 0)
+	fmt.Println(l.toString())
 }
 
 func NewLinkedList(value string) *LinkedList {
@@ -79,8 +88,29 @@ func (l *LinkedList) prepend(value string) {
 	l.length++
 }
 
+// insert adds a node at a given index - O(n) / O(1) if adding to start or end
 func (l *LinkedList) insert(value string, index int) {
+	// when first index perform prepend
+	if index == 0 {
+		l.prepend(value)
+		return
+	}
 
+	// check index out of range and add to end of list
+	if index >= l.length {
+		l.append(value)
+		return
+	}
+
+	// traverse linked list and find starting node
+	preNode := l.getNodeAtIndex(index - 1)
+
+	// make new node pointer to node at current index
+	n := NewNode(value)
+	n.next = preNode.next
+
+	// update and assign previous node to newly created node
+	preNode.next = n
 }
 
 // toString generates a string representation of the linked list
@@ -108,4 +138,18 @@ func (n *Node) toString() string {
 	}
 
 	return "[v: " + n.value + ", p: *" + pointer + "]"
+}
+
+// getNodeAtIndex returns the node at the given index
+func (l *LinkedList) getNodeAtIndex(index int) *Node {
+	// start from head of linked list
+	pointer := l.head
+
+	// move pointer to index we want
+	for i := 0; i < index; i++ {
+		// move pointer to next node
+		pointer = pointer.next
+	}
+
+	return pointer
 }
