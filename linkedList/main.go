@@ -187,7 +187,7 @@ func (n *Node) toString() string {
 		pointer = n.next.value
 	}
 
-	return "[v: " + n.value + ", p: *" + pointer + "]"
+	return "[value: " + n.value + ", pointer: *" + pointer + "]"
 }
 
 // getNodeAtIndex returns the node at the given index - O(n)
