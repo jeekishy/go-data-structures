@@ -192,29 +192,38 @@ func (l *LinkedList) reverse() {
 		return
 	}
 
-	// get first and second nodes
-	firstNode := l.head
-	secondNode := firstNode.next
+	// keep two pointers
+	var prevPointer *Node
+	currentPointer := l.head
 
-	// loop through list until second node is empty and we reach the tail
-	for secondNode != nil {
-		// get a copy of third node
-		thirdNode := secondNode.next
+	// loop until current pointer has reached the last node and point to nil
+	for currentPointer != nil {
+		// keep a copy of the next node before we break the link
+		nextPointer := currentPointer.next
 
-		// point second node to head
-		secondNode.next = firstNode
+		// reverse our current node by pointing it to the previous node
+		// this will break the link of our current pointer and will reverse it
+		// ("apples")<---("grapes")-X->("kiwi")--->("bananas")
+		//		^			^	           ^
+		//		|			|			   |
+		//   previous	  current		  next
+		currentPointer.next = prevPointer
 
-		// move first node forward and point it to second node
-		firstNode = secondNode
-
-		// update second node to next node
-		secondNode = thirdNode
+		// move previous pointer one step forward to take current pointer's position
+		// and update current pointer to take next's position
+		// ("apples")<---("grapes")<---("kiwi")-X->("bananas")
+		//					^	           ^			^
+		//					|			   |			|
+		//   	  	     previous		current		   next
+		prevPointer = currentPointer
+		currentPointer = nextPointer
 	}
 
-	// update head and tail
+	// make tail the head
 	l.tail = l.head
-	l.head.next = nil
-	l.head = firstNode
+
+	// update head to take previous pointers position
+	l.head = prevPointer
 }
 
 // toString generates a string representation of the linked list
