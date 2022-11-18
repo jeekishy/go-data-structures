@@ -47,7 +47,8 @@ func main() {
 	l.delete(0)
 	fmt.Println(l.toString())
 
-	fmt.Println(l)
+	l.reverse()
+	fmt.Println(l.toString())
 }
 
 func NewLinkedList(value string) *LinkedList {
@@ -74,7 +75,15 @@ func (l *LinkedList) append(value string) {
 	// create new Node
 	n := NewNode(value)
 
-	// pointer current tail next pointer to new Node
+	// check linked list is empty
+	if l.length == 0 {
+		l.head = n
+		l.tail = n
+		l.length++
+		return
+	}
+
+	// point current tail next pointer to new Node
 	l.tail.next = n
 
 	// make new Node the tail
@@ -88,6 +97,14 @@ func (l *LinkedList) append(value string) {
 func (l *LinkedList) prepend(value string) {
 	// create new Node
 	n := NewNode(value)
+
+	// check linked list is empty
+	if l.length == 0 {
+		l.head = n
+		l.tail = n
+		l.length++
+		return
+	}
 
 	// update node next pointer
 	n.next = l.head
@@ -153,14 +170,51 @@ func (l *LinkedList) delete(index int) {
 	preNode := l.getNodeAtIndex(index - 1)
 	nodeToDelete := preNode.next
 
-	// link preNode to node after index
+	// link preNode to node after node to be deleted index
 	preNode.next = nodeToDelete.next
+
+	// check pre node is nil then make it the tail
+	if preNode.next == nil {
+		l.tail = preNode
+	}
 
 	// remove node to delete next link to other node
 	nodeToDelete.next = nil
 
 	// update counter
 	l.length--
+}
+
+// reverse re-orders the linked list
+func (l *LinkedList) reverse() {
+	// check list has one or less nodes
+	if l.length <= 1 {
+		return
+	}
+
+	// get first and second nodes
+	firstNode := l.head
+	secondNode := firstNode.next
+
+	// loop through list until second node is empty and we reach the tail
+	for secondNode != nil {
+		// get a copy of third node
+		thirdNode := secondNode.next
+
+		// point second node to head
+		secondNode.next = firstNode
+
+		// move first node forward and point it to second node
+		firstNode = secondNode
+
+		// update second node to next node
+		secondNode = thirdNode
+	}
+
+	// update head and tail
+	l.tail = l.head
+	l.head.next = nil
+	l.head = firstNode
 }
 
 // toString generates a string representation of the linked list
