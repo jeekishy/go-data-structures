@@ -32,19 +32,44 @@ func main() {
 	b.insert(40)
 	b.insert(56)
 	b.insert(58)
+	b.insert(3)
+	b.insert(2)
+	b.insert(1)
 
-	n, err := b.lookup(58)
+	n, err := b.lookup(40)
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println(n)
+		fmt.Println("Node found:", n)
+	}
+
+	n, err = b.lookup(58)
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("Node found:", n)
 	}
 
 	n, err = b.lookup(123)
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println(n)
+		fmt.Println("Node found:", n)
+	}
+
+	n, err = b.lookup(120)
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("Node found:", n)
+	}
+
+	b.delete(120)
+	n, err = b.lookup(120)
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("Node found:", n)
 	}
 
 }
@@ -115,7 +140,7 @@ func (b *BinaryTree) lookup(value int) (*Node, error) {
 	p := b.parent
 
 	for {
-		fmt.Println("current node:", p)
+		fmt.Println("Node: ", p)
 
 		// check if current pointer's value is same as the value wanted
 		if value == p.value {
@@ -140,6 +165,88 @@ func (b *BinaryTree) lookup(value int) (*Node, error) {
 
 		p = p.left
 	}
+}
+
+func (b *BinaryTree) delete(value int) bool {
+	// keep track of parent and current node
+	parentNode := b.parent
+	currentNode := b.parent
+
+	for {
+		// check if current pointer's value is same as the value wanted
+		if value == currentNode.value {
+			break
+		}
+
+		// check right node
+		if value > currentNode.value {
+			// check if next node is empty
+			if currentNode.right == nil {
+				break
+			}
+
+			// update node pointers
+			parentNode = currentNode
+			currentNode = currentNode.right
+			continue
+		}
+
+		// else node would be left
+		if currentNode.left == nil {
+			break
+		}
+
+		// update node pointers
+		parentNode = currentNode
+		currentNode = currentNode.left
+	}
+
+	// when node has no children
+	// just delete it by make parent node nil
+	if currentNode.right == nil && currentNode.left == nil {
+		// find parent pointing node and delete
+		if parentNode.right == currentNode {
+			parentNode.right = nil
+		}
+
+		if parentNode.left == currentNode {
+			parentNode.left = nil
+		}
+
+		return true
+	}
+
+	// when node has no right child
+	// set parent of to be deleted node to left child of to be deleted node
+	if currentNode.right == nil {
+		// find parent pointing node and delete
+		if parentNode.right == currentNode {
+			parentNode.right = currentNode.left
+		}
+
+		if parentNode.left == currentNode {
+			parentNode.left = currentNode.left
+		}
+
+		return true
+	}
+
+	// when node has no left child
+	// set parent of to be deleted node to right child of to be deleted node
+	if currentNode.left == nil {
+		// find parent pointing node and delete
+		if parentNode.right == currentNode {
+			parentNode.right = currentNode.right
+		}
+
+		if parentNode.left == currentNode {
+			parentNode.left = currentNode.right
+		}
+
+		return true
+	}
+
+	return false
 }
 
 func (b *BinaryTree) toString() string {
