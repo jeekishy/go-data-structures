@@ -28,7 +28,7 @@ func main() {
 	fmt.Println("Peeking: ", s.peek())
 
 	s.pop()
-	fmt.Println("poping top element from stack..: ")
+	fmt.Println("poping top element from stackWithLinkedList..: ")
 	fmt.Println(s.toString())
 
 	if !s.isEmpty() {
@@ -50,33 +50,33 @@ func main() {
 	s.pop()
 }
 
-// peek returns the first element in a stack
+// peek returns the first element in a stackWithLinkedList
 func (s *Stack) peek() *Node {
 	return s.top
 }
 
-// push adds an element on top of the stack
+// push adds an element on top of the stackWithLinkedList
 func (s *Stack) push(value string) {
 	n := NewNode(value)
 
-	// point new node to top of stack
+	// point new node to top of stackWithLinkedList
 	n.next = s.top
 
-	// make new node the top of the stack now
+	// make new node the top of the stackWithLinkedList now
 	s.top = n
 
-	// increase length of stack
+	// increase length of stackWithLinkedList
 	s.length++
 }
 
-// pop deletes the first element in the stack
+// pop deletes the first element in the stackWithLinkedList
 func (s *Stack) pop() {
-	// check stack no empty
+	// check stackWithLinkedList no empty
 	if s.length == 0 {
 		return
 	}
 
-	// check if only one node is left in stack
+	// check if only one node is left in stackWithLinkedList
 	if s.length == 1 {
 		s.top = nil
 		s.bottom = nil
@@ -93,11 +93,11 @@ func (s *Stack) pop() {
 	// make next node the top
 	s.top = nextNode
 
-	// update size of stack
+	// update size of stackWithLinkedList
 	s.length--
 }
 
-// isEmpty checks if stack is empty
+// isEmpty checks if stackWithLinkedList is empty
 func (s *Stack) isEmpty() bool {
 	if s.length == 0 {
 		return true
@@ -106,7 +106,7 @@ func (s *Stack) isEmpty() bool {
 	return false
 }
 
-// NewStack creates and return a new stack
+// NewStack creates and return a new stackWithLinkedList
 func NewStack(value string) *Stack {
 	n := NewNode(value)
 
